@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { EmployeeCreateDto } from './EmployeeCreate.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Employee, EmployeeStatus, EmployeeTier } from './Employee.model';
 import {v1 as uuid} from 'uuid';
 import { EmployeeSearchDto } from './Employee.Search.dto';
@@ -11,13 +12,8 @@ export class EmployeeService {
     getAllEmployees(){
         return this.employee;
     }
-    createEmployee(
-        firstName:string, 
-        lastName:string,
-        city:string, 
-        mobile:string, 
-        tier:EmployeeTier,
-        ){
+    createEmployee(EmployeeCreateDto:EmployeeCreateDto){
+        const {firstName, lastName, city, mobile, tier} = EmployeeCreateDto;
         
         const employee = {
             id:uuid(),
@@ -45,7 +41,12 @@ export class EmployeeService {
         return employees;
     }
     getEmployeeById(id:string):Employee{
-        return this.employee.find(employee => employee.id === id);
+        const employees = this.getAllEmployees();
+        let employee =  employees.find(employee => employee.id === id);
+        if(!employee){
+            throw new NotFoundException(`${id} not found`);
+        }
+        return employee;
     }
 
     updateEmployee(employeeUpdateDto:EmployeeUpdateDto):Employee{

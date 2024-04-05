@@ -1,0 +1,1 @@
+export const MONGO_CONNECTION = 'mongodb+srv://mash:123@cluster0.sp7iddi.mongodb.net/EMPLOYEE_MANAGEMENT?retryWrites=true&w=majority&appName=Cluster0';

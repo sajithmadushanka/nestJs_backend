@@ -1,7 +1,9 @@
-import { Employee, EmployeeStatus } from './Employee.model';
+import { IsIn } from 'class-validator';
+import {  EmployeeStatus } from './Employee.model';
 
 
-export interface EmployeeSearchDto {
+export class EmployeeSearchDto {
+        @IsIn(Object.values(EmployeeStatus))
         status:EmployeeStatus
         name:string   
 }
