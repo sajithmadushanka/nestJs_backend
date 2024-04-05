@@ -1,5 +1,5 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { EmployeeTier } from 'src/employee/Employee.model';
+import { EmployeeTier } from '../employee/Employee.enum';
 
 @Injectable()
 export class EmployeeTierValidationPipe implements PipeTransform {

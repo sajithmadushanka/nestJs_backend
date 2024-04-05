@@ -1,5 +1,5 @@
 import { IsNotEmpty, Matches, NotEquals } from "class-validator";
-import { EmployeeTier } from "./Employee.model";
+import { EmployeeTier } from "../Employee.enum";
 
 export class EmployeeCreateDto{
 

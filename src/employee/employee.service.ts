@@ -1,65 +1,59 @@
-import { EmployeeCreateDto } from './EmployeeCreate.dto';
+import { EmployeeRepository } from './repository/Employee.repository';
+import { EmployeeCreateDto } from './dto/EmployeeCreate.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Employee, EmployeeStatus, EmployeeTier } from './Employee.model';
+import { EmployeeStatus } from './Employee.enum';
 import {v1 as uuid} from 'uuid';
-import { EmployeeSearchDto } from './Employee.Search.dto';
-import { EmployeeUpdateDto } from './EmployeeUpdate.dto';
+import { EmployeeSearchDto } from './dto/Employee.Search.dto';
+import { EmployeeUpdateDto } from './dto/EmployeeUpdate.dto';
+import { Employee } from './schemas/Employee.schemas';
+
 
 @Injectable()
 export class EmployeeService {
-    private employee:Employee[] = []
+    
+    constructor(private employeeRepositary:EmployeeRepository){}
 
-    getAllEmployees(){
-        return this.employee;
+   async getAllEmployees():Promise<Employee[]>{
+        return await this.employeeRepositary.findAll();
     }
-    createEmployee(EmployeeCreateDto:EmployeeCreateDto){
-        const {firstName, lastName, city, mobile, tier} = EmployeeCreateDto;
+   async createEmployee(EmployeeCreateDto:EmployeeCreateDto):Promise<Employee>{
         
-        const employee = {
-            id:uuid(),
-            firstName,   // firstName : firstName
-            lastName,
-            city,
-            mobile,
-            tier,
-            status:EmployeeStatus.ACTIVE,
-        }
-
-        this.employee.push(employee);
-        return employee;
+        return await this.employeeRepositary.create(EmployeeCreateDto);
+        
+      
     }
 
-    employeeSearch(employeeSearchDto:EmployeeSearchDto):Employee[]{
-        const {name, status} = employeeSearchDto;
-        let employees = this.getAllEmployees();
-        if(name){
-            employees = employees.filter(employee => employee.firstName.includes(name) || employee.lastName.includes(name));
-        }
-        if(status){
-            employees = employees.filter(employee => employee.status === status);
-        }
-        return employees;
-    }
-    getEmployeeById(id:string):Employee{
-        const employees = this.getAllEmployees();
-        let employee =  employees.find(employee => employee.id === id);
-        if(!employee){
-            throw new NotFoundException(`${id} not found`);
-        }
-        return employee;
-    }
+    // employeeSearch(employeeSearchDto:EmployeeSearchDto):Employee[]{
+    //     const {name, status} = employeeSearchDto;
+    //     let employees = this.getAllEmployees();
+    //     if(name){
+    //         employees = employees.filter(employee => employee.firstName.includes(name) || employee.lastName.includes(name));
+    //     }
+    //     if(status){
+    //         employees = employees.filter(employee => employee.status === status);
+    //     }
+    //     return employees;
+    // }
+    // getEmployeeById(id:string):Employee{
+    //     const employees = this.getAllEmployees();
+    //     let employee =  employees.find(employee => employee.id === id);
+    //     if(!employee){
+    //         throw new NotFoundException(`${id} not found`);
+    //     }
+    //     return employee;
+    // }
 
-    updateEmployee(employeeUpdateDto:EmployeeUpdateDto):Employee{
-        const{id, city} = employeeUpdateDto;
-        let employee = this.getEmployeeById(id);
-        employee.city = city;
-        return employee;
-    }
+    // updateEmployee(employeeUpdateDto:EmployeeUpdateDto):Employee{
+    //     const{id, city} = employeeUpdateDto;
+    //     let employee = this.getEmployeeById(id);
+    //     employee.city = city;
+    //     return employee;
+    // }
 
-    deleteEmployee(id:string):boolean{
-        let employee = this.getAllEmployees();
-        this.employee = this.employee.filter(employee => employee.id !== id);
-        return (employee.length !== this.employee.length);
-    }
+    // deleteEmployee(id:string):boolean{
+    //     let employee = this.getAllEmployees();
+    //     this.employee = this.employee.filter(employee => employee.id !== id);
+    //     return (employee.length !== this.employee.length);
+    // }
     
 }

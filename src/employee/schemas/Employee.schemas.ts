@@ -1,17 +1,17 @@
 
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { EmployeeStatus, EmployeeTier } from "../Employee.enum";
 
-export class EmployeeSchema{
-    id:string;
-    firstName:string;
-    lastName:string;
-    city:string;
-    mobile:string;
-    tier:EmployeeTier;
-    status:EmployeeStatus;
+// export class EmployeeSchema{
+//     id:string;
+//     firstName:string;
+//     lastName:string;
+//     city:string;
+//     mobile:string;
+//     tier:EmployeeTier;
+//     status:EmployeeStatus;
 
-}
+// }
 export type EmployeeDocument = Employee & Document;
 @Schema()
 export class Employee{
@@ -30,3 +30,5 @@ export class Employee{
     @Prop()
     status:EmployeeStatus;
 }
+
+export const EmployeeSchema = SchemaFactory.createForClass(Employee);
